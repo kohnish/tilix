@@ -1439,10 +1439,18 @@ private:
         if (pasteText.length == 0) return;
         if (pasteText.indexOf("\n") <= -1) return paste(source);
 
-        AdvancedPasteDialog dialog = new AdvancedPasteDialog(cast(Window) getToplevel(), pasteText, isPasteUnsafe(pasteText));
+        Window parent = cast(Window) getToplevel();
+        AdvancedPasteDialog dialog = new AdvancedPasteDialog(parent, pasteText, isPasteUnsafe(pasteText));
+        bool wasFullscreen = false;
+        if (parent.getWindow() !is null && ((parent.getWindow().getState() & GdkWindowState.FULLSCREEN) == GdkWindowState.FULLSCREEN)) {
+            wasFullscreen = true;
+        }
         scope(exit) {
             dialog.hide();
             dialog.destroy();
+            if (wasFullscreen) {
+                parent.fullscreen();
+            }
         }
         dialog.showAll();
         if (dialog.run() == ResponseType.APPLY) {
