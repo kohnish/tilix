@@ -1448,12 +1448,11 @@ private:
         scope(exit) {
             dialog.hide();
             dialog.destroy();
+            if (wasFullscreen) {
+                parent.fullscreen();
+            }
         }
         dialog.showAll();
-        if (wasFullscreen) {
-            parent.fullscreen();
-            dialog.setKeepAbove(true);
-        }
         if (dialog.run() == ResponseType.APPLY) {
             pasteText = dialog.text;
             vte.feedChild(pasteText[0 .. $]);
