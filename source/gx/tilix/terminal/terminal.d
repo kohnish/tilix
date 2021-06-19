@@ -2738,6 +2738,9 @@ private:
             }
         }
         string[] envv = ["TILIX_ID=" ~ uuid];
+        if (tilix.isQuake) {
+            envv ~= ["TILIX_QUAKE=1"];
+        }
         foreach (arg; args)
             trace("Argument: " ~ arg);
         try {
